@@ -11,7 +11,7 @@ on:
       - main
 
 env:
-  PYTHON_VERSION: "3.12"
+  DEFAULT_PYTHON_VERSION: "3.12"
   CI: "1"
 
 jobs:
@@ -48,10 +48,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
+      - name: Set up Python ${{ env.DEFAULT_PYTHON_VERSION }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: ${{ env.DEFAULT_PYTHON_VERSION }}
           cache: "pip"
 
       - name: Install pre-commit
@@ -91,7 +91,7 @@ jobs:
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v4
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: ${{ env.DEFAULT_PYTHON_VERSION }}
           cache: true
 
       - name: Install dependencies
