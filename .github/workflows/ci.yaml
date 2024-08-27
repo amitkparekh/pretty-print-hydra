@@ -35,7 +35,7 @@ jobs:
               - 'configs/**/*'
               - 'pyproject.toml'
               - 'pdm.lock'
-              - '.github/workflows/ci.yml'
+              - '.github/workflows/ci.yaml'
             pre_commit_config:
               - '.pre-commit-config.yaml'
 
