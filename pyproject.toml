@@ -22,6 +22,8 @@ build-backend = "pdm.backend"
 
 [tool.pdm]
 distribution = true
+plugins = ["sync-pre-commit-lock"]
+
 [tool.pdm.build]
 package-dir = "src"
 
