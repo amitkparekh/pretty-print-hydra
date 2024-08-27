@@ -47,21 +47,6 @@ repos:
     hooks:
       - id: fix-smartquotes
 
-  - repo: https://github.com/hakancelik96/unimport
-    rev: 1.2.1
-    hooks:
-      - id: unimport
-        types: [python]
-        args:
-          - --ignore-init
-          - --include-star-import
-          - --gitignore
-
-  # - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
-  #   rev: 2.7.2
-  #   hooks:
-  #     - id: editorconfig-checker
-
   - repo: https://github.com/pappasam/toml-sort
     rev: "v0.23.1"
     hooks:
