@@ -15,17 +15,10 @@ classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Typing :: Typed",
 ]
-[build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
-
 
 [tool.pdm]
 distribution = true
 plugins = ["sync-pre-commit-lock"]
-
-[tool.pdm.build]
-package-dir = "src"
 
 [tool.pdm.dev-dependencies]
 lint = [
@@ -47,6 +40,8 @@ test = [
     "nox>=2024.4.15",
 ]
 
+[tool.pdm.build]
+package-dir = "src"
 
 [tool.pdm.scripts]
 pre_install = "pdm install --plugins"
@@ -208,3 +203,7 @@ overrides."project".first = [
 ]
 overrides."tool".first = ["pdm"]
 overrides."tool.pdm".first = ["dev-dependencies"]
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
