@@ -37,7 +37,6 @@ test = [
     "hypothesis>=6.111.2",
     "pytest-sugar>=1.0.0",
     "pytest-mock>=3.14.0",
-    "nox>=2024.4.15",
 ]
 
 [tool.pdm.build]
