@@ -12,7 +12,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
-    "Development Status :: 2 - Pre-Alpha",
+    "Development Status :: 3 - Alpha",
     "Typing :: Typed",
 ]
 
@@ -45,6 +45,7 @@ package-dir = "src"
 [tool.pdm.scripts]
 pre_install = "pdm install --plugins"
 format = "pre-commit run --all-files"
+release = "cz bump --changelog --tag --yes"
 
 [tool.basedpyright]
 typeCheckingMode = "all"
@@ -72,6 +73,14 @@ reportPrivateImportUsage = false
 reportImplicitStringConcatenation = false
 reportDeprecated = false
 reportMissingParameterType = false
+
+[tool.commitizen]
+version_provider = "pep621"
+update_changelog_on_bump = true
+tag_format = "v$version"
+version_scheme = "semver2"
+major_version_zero = true
+bump_message = "chore(release): $current_version → $new_version"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
