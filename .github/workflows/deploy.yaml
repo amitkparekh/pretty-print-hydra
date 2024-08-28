@@ -12,9 +12,38 @@ env:
   CI: "1"
 
 jobs:
+  github_release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Python ${{ env.DEFAULT_PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.DEFAULT_PYTHON_VERSION }}
+
+      - name: Install Commitizen
+        run: pip install commitizen
+
+      - name: Generate changelog for the release
+        run: cz changelog ${{ github.ref }} --file-name="CHANGES.md"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: CHANGES.md
+
   deploy_to_pypi:
     name: Deploy to PyPI
     runs-on: ubuntu-latest
+    needs: [github_release]
     permissions:
       # This permission is needed for private repositories.
       contents: read
@@ -24,8 +53,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup PDM
         uses: pdm-project/setup-pdm@v4
