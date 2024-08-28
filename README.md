@@ -2,7 +2,6 @@
 
 [![PyPI version](https://badge.fury.io/py/pretty-print-hydra.svg)](https://badge.fury.io/py/pretty-print-hydra)
 [![Python Version](https://img.shields.io/pypi/pyversions/pretty-print-hydra.svg)](https://pypi.org/project/pretty-print-hydra/)
-[![Downloads](https://pepy.tech/badge/pretty-print-hydra)](https://pepy.tech/project/pretty-print-hydra)
 
 Test coverage
 CI status
