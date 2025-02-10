@@ -113,7 +113,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Install deps
-        run: uv sync --group tests
+        run: uv sync --group test
 
       - name: Run tests
         uses: quantco/pytest-action@v2
