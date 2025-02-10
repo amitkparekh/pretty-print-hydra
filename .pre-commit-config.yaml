@@ -1,5 +1,5 @@
 default_language_version:
-  python: python3.12
+  python: python3.10
 
 # Only commit is installed by default: https://pre-commit.com/#pre-commit-install
 # Pending rename of pre-push from: https://github.com/pre-commit/pre-commit/issues/2732
