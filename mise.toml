@@ -4,7 +4,7 @@ run = "uv run pre-commit run -a"
 
 [tasks.release]
 description = "Release a new version"
-run = "uv run cz bump --changelog --tag --yes"
+run = "uv run cz bump --changelog --yes"
 
 [tasks.tests]
 description = "Run all tests"
