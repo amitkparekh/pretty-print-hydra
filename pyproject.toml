@@ -39,6 +39,8 @@ test = [
     "hypothesis>=6.111.2",
     "pytest-sugar>=1.0.0",
     "pytest-mock>=3.14.0",
+    "pytest-md>=0.2.0",
+    "pytest-emoji>=0.2.0",
 ]
 
 [tool.basedpyright]
