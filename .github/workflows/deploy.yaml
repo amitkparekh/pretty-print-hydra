@@ -8,7 +8,7 @@ on:
       - "v*"
 
 env:
-  DEFAULT_PYTHON_VERSION: "3.10"
+  PYTHON_VERSION: "3.10"
   CI: "1"
 
 jobs:
@@ -24,16 +24,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Python ${{ env.DEFAULT_PYTHON_VERSION }}
-        uses: actions/setup-python@v5
+      - uses: astral-sh/setup-uv@v5
         with:
-          python-version: ${{ env.DEFAULT_PYTHON_VERSION }}
-
-      - name: Install Commitizen
-        run: pip install commitizen
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Generate changelog for the release
-        run: cz changelog ${{ github.ref }} --file-name="CHANGES.md"
+        run: uvx --from commitizen cz changelog ${{ github.ref }} --file-name="CHANGES.md"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -54,10 +51,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup PDM
-        uses: pdm-project/setup-pdm@v4
+      - uses: astral-sh/setup-uv@v5
         with:
-          python-version: ${{ env.DEFAULT_PYTHON_VERSION }}
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Publish package distributions to PyPI
-        run: pdm publish
+        run: |
+          uv build
+          uv publish
