@@ -7,13 +7,23 @@ default_install_hook_types: ["commit-msg", "pre-commit"]
 
 repos:
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: v3.29.0
+    rev: v4.1.0
     hooks:
       - id: commitizen
         stages: [commit-msg]
 
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.5.18
+    hooks:
+      - id: uv-lock
+
+  - repo: https://github.com/editorconfig-checker/editorconfig-checker.python
+    rev: "3.0.3"
+    hooks:
+      - id: editorconfig-checker
+
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: check-merge-conflict
       - id: check-vcs-permalinks
@@ -37,41 +47,66 @@ repos:
         types: [python]
 
   - repo: https://github.com/sirosen/check-jsonschema
-    rev: 0.27.0
+    rev: 0.31.0
     hooks:
       - id: check-github-workflows
         types: [yaml]
 
   - repo: https://github.com/sirosen/texthooks
-    rev: 0.5.0
+    rev: 0.6.8
     hooks:
       - id: fix-smartquotes
 
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.10.0
+    hooks:
+      - id: shellcheck
+
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.10.0-2
+    hooks:
+      - id: shfmt
+
   - repo: https://github.com/pappasam/toml-sort
-    rev: "v0.23.1"
+    rev: "v0.24.2"
     hooks:
       - id: toml-sort
         args: [--in-place]
 
   - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v3.0.3
+    rev: v4.0.0-alpha.8
     hooks:
       - id: prettier
-        types_or: [html, javascript, shell, yaml, json]
+        types_or: [html, javascript, yaml, json, markdown]
 
-  - repo: https://github.com/PyCQA/docformatter
-    rev: v1.7.5
+  - repo: local
     hooks:
       - id: docformatter
-        types: [python]
-        args: [--in-place, --wrap-summaries=99, --wrap-descriptions=99]
+        name: docformatter
+        language: system
+        entry: uv run docformatter --in-place --wrap-summaries=99 --wrap-descriptions=99
+        types_or: [python, pyi, jupyter]
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: "v0.6.2"
-    hooks:
-      - id: ruff
+      - id: ruff-lint
         name: ruff linter
-        args: [--fix, --exit-non-zero-on-fix]
+        entry: uv run ruff check --fix --exit-non-zero-on-fix
         types_or: [python, pyi, jupyter]
+        language: system
+
       - id: ruff-format
+        name: ruff format
+        entry: uv run ruff format
         types_or: [python, pyi, jupyter]
+        language: system
+
+      - id: wemake-python-styleguide
+        name: wemake-python-styleguide
+        entry: uv run flake8
+        types_or: [python, jupyter]
+        language: system
+
+      - id: basedpyright
+        name: basedpyright
+        entry: uv run basedpyright
+        types_or: [python, pyi, jupyter]
+        language: system

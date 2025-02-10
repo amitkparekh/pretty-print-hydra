@@ -3,7 +3,11 @@ name = "pretty-print-hydra"
 version = "0.1.0"
 description = "Pretty print Hydra configs for easier debugging in development."
 authors = [{name = "Amit Parekh", email = "amit@amitkparekh.com"}]
-dependencies = ["hydra-core>=1.3.0", "rich>=13.0.0", "omegaconf>=2.3.0"]
+dependencies = [
+    "hydra-core>=1.3.0",
+    "rich>=13.0.0",
+    "omegaconf>=2.3.0",
+]
 requires-python = ">=3.10"
 readme = "README.md"
 license = {text = "MIT"}
@@ -16,18 +20,15 @@ classifiers = [
     "Typing :: Typed",
 ]
 
-[tool.pdm]
-distribution = true
-plugins = ["sync-pre-commit-lock"]
-
-[tool.pdm.dev-dependencies]
+[dependency-groups]
 lint = [
-    "ruff>=0.6.1",
-    "pre-commit>=3.8.0",
-    "commitizen>=3.29.0",
-    "basedpyright>=1.16.0",
-    "toml-sort>=0.23.1",
+    "basedpyright>=1.23.2",
     "docformatter>=1.7.5",
+    "flake8-pyproject>=1.2.3",
+    "pre-commit>=4.0.1",
+    "ruff>=0.9.0",
+    "toml-sort>=0.24.2",
+    "wemake-python-styleguide>=1.0.0",
 ]
 test = [
     "pytest>=8.3.2",
@@ -39,40 +40,31 @@ test = [
     "pytest-mock>=3.14.0",
 ]
 
-[tool.pdm.build]
-package-dir = "src"
-
-[tool.pdm.scripts]
-pre_install = "pdm install --plugins"
-format = "pre-commit run --all-files"
-release = "cz bump --changelog --tag --yes"
-
 [tool.basedpyright]
-typeCheckingMode = "all"
+verboseOutput = true
+typeCheckingMode = "recommended"
+reportAny = false
+reportExplicitAny = false
+reportImplicitOverride = true
+reportIncompatibleMethodOverride = true
+reportMissingSuperCall = false
 reportMissingTypeStubs = false
+reportUnannotatedClassAttribute = false
+reportUnknownArgumentType = false
+reportUnknownLambdaType = false
 reportUnknownMemberType = false
-reportFunctionMemberAccess = "warning"
+reportUnknownParameterType = false
 reportUnknownVariableType = false
 reportUntypedFunctionDecorator = false
-reportUnknownLambdaType = false
-reportUnknownArgumentType = false
-reportUnknownParameterType = false
-reportAny = false
-reportImplicitOverride = false
-reportMissingSuperCall = false
-reportUnusedCallResult = false
-reportIncompatibleMethodOverride = false
-reportInvalidCast = false
-reportPrivateLocalImportUsage = false
-reportUnsafeMultipleInheritance = false
 # Covered by ruff
-reportUnusedParameter = false
+reportDeprecated = false
+reportImplicitStringConcatenation = false
+reportMissingParameterType = false
+reportPrivateImportUsage = false
 reportPrivateUsage = false
 reportUnusedImport = false
-reportPrivateImportUsage = false
-reportImplicitStringConcatenation = false
-reportDeprecated = false
-reportMissingParameterType = false
+reportUnusedParameter = false
+reportUnusedVariable = false
 
 [tool.commitizen]
 version_provider = "pep621"
@@ -82,8 +74,28 @@ version_scheme = "semver2"
 major_version_zero = true
 bump_message = "chore(release): $current_version → $new_version"
 
+[tool.flake8]
+extend-exclude = [".venv"]
+extend-ignore = [
+    # basedpyright checks for unused variables
+    "WPS122",
+    # WPS struggles with pydantic models
+    "WPS601",
+]
+select = ["WPS"]
+max-line-length = 99
+nested-classes-whitelist = ["Meta", "Params", "Config"]
+allowed-domain-names = ["data", "params"]
+# WPS211: Increase number of arguments allowed for a function
+max-arguments = 10
+# WPS214: Increase number of methods allowed for a class
+max-methods = 20
+# WPS235: Increase number of imports allowed from a module
+max-import-from-members = 10
+# WPS226: Increase number of string literals allowed before wemake complains
+max-string-usages = 10
+
 [tool.pytest.ini_options]
-testpaths = ["tests"]
 filterwarnings = [
     "ignore::UserWarning",
     'ignore:Deprecated call to `pkg_resources.declare_namespace:DeprecationWarning',
@@ -102,9 +114,8 @@ skip-magic-trailing-comma = true
 [tool.ruff.lint]
 # Enable every possible rule
 select = ["ALL"]
+external = ["WPS"]
 ignore = [
-    # Allow function call as argument default
-    "B008",
     # Don't ask for docstring at top of module --- put it in the functions/classes
     "D100",
     # Do not check for docstring within __init__ method
@@ -130,9 +141,6 @@ ignore = [
     "EM",
     # Allow TODO comments
     "FIX002",
-    # We don't need to care about creating separate exception classes for every single type of
-    # error
-    "TRY003",
     # Allow assigning variables before returning them
     "RET504",
     # Don't care about requiring an author name or issue link for a todo
@@ -177,15 +185,16 @@ runtime-evaluated-base-classes = [
 
 [tool.ruff.lint.isort]
 combine-as-imports = true
+known-first-party = ["gptnt"]
 split-on-trailing-comma = false
 
 [tool.ruff.lint.mccabe]
 max-complexity = 18
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*" = ["D", "S101", "INP001", "PLR2004", "FBT001", "SLF001"]
+"__init__.py" = ["D", "F401", "I002"]
+"**/tests/*" = ["D", "S101", "INP001", "PLR2004", "FBT001", "SLF001"]
 "scripts/*" = ["INP001"]
-"src/**/__init__.py" = ["D", "F401", "I002"]
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
@@ -193,12 +202,8 @@ convention = "google"
 [tool.ruff.lint.pylint]
 max-args = 20
 
-[tool.sync-pre-commit-lock.dependency-mapping]
-toml-sort = {"repo" = "https://github.com/pappasam/toml-sort", "rev" = "v${rev}"}
-docformatter = {"repo" = "https://github.com/PyCQA/docformatter", "rev" = "v${rev}"}
-
 [tool.tomlsort]
-sort_first = ["project", "tool"]
+sort_first = ["project", "dependency-groups", "tool"]
 spaces_indent_inline_array = 4 # Matching editorconfig
 trailing_comma_inline_array = true
 overrides."project".first = [
@@ -210,9 +215,8 @@ overrides."project".first = [
     "readme",
     "requires-python",
 ]
-overrides."tool".first = ["pdm"]
-overrides."tool.pdm".first = ["dev-dependencies"]
+overrides."tool".first = ["uv"]
 
 [build-system]
-requires = ["pdm-backend"]
-build-backend = "pdm.backend"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
