@@ -1,2 +1,2 @@
 def test_tests_work() -> None:
-    assert True
+    assert True  # noqa: WPS444

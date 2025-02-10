@@ -17,7 +17,10 @@ def prettyify_inputs(
 ) -> Panel:
     """Make the inputs to the confile file pretty."""
     # Make the prefixes
-    override_prefix = f"{(len(config_file_prefix) - len(override_prefix)) * ' '}{override_prefix}"
+    override_prefix = "{space}{override_prefix}".format(
+        space=(len(config_file_prefix) - len(override_prefix)) * " ",
+        override_prefix=override_prefix,
+    )
 
     # Pretty the config file
     printed_config_file = f"{config_file_prefix}'{config_file}'"
@@ -30,7 +33,7 @@ def prettyify_inputs(
 
     renderable = printed_config_file
     if printed_overrides:
-        renderable += "\n" + "\n".join(printed_overrides)
+        renderable += "\n" + "\n".join(printed_overrides)  # noqa: WPS336
 
     # Make the panel
     return Panel(
