@@ -30,7 +30,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
 
       - name: Generate changelog for the release
-        run: uvx --from commitizen cz changelog ${{ github.ref }} --file-name="CHANGES.md"
+        run: uvx --from commitizen cz changelog ${{ github.ref_name }} --file-name="CHANGES.md"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
