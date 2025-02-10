@@ -23,6 +23,7 @@ classifiers = [
 [dependency-groups]
 lint = [
     "basedpyright>=1.23.2",
+    "commitizen>=4.2.1",
     "docformatter>=1.7.5",
     "flake8-pyproject>=1.2.3",
     "pre-commit>=4.0.1",
